@@ -1,16 +1,19 @@
 import smtplib
 
-smtp_host = "smtp.gmail.com"
-smtp_port = 587
-user = "your_email_address"
-passw = "your_password"
-receiver = "receiver_email_address"
+from utilities.varaibles import var
 
-server = smtplib.SMTP(smtp_host, smtp_port)
-server.connect(smtp_host,smtp_port)
-server.ehlo()
-server.starttls()
-server.ehlo()
-server.login(user, passw)
+smtp_host = var.smtp_host
+smtp_port = int(var.smtp_port)
+user = var.email_sender
+passw = var.email_sender_password
+receiver = ",".join([i for i in var.email_receivers])
 
-server.sendmail(user,receiver,"mail try2")
+def send_mail(): 
+    server = smtplib.SMTP(smtp_host, smtp_port)
+    server.connect(smtp_host,smtp_port)
+    server.ehlo()
+    server.starttls()
+    server.ehlo()
+    server.login(user, passw)
+
+    server.sendmail(user,receiver,"mail try2")
