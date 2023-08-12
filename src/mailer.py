@@ -1,4 +1,5 @@
 import smtplib
+import os
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.application import MIMEApplication
@@ -27,12 +28,15 @@ class Mailer:
         return msg
         
     def attach_files(self, file_path, msg):
-        with open(file_path, 'rb') as file:
-            p = MIMEApplication(file.read())
-            p.add_header('Content-Disposition',f"attachment; filename={file_path.split('/')[-1]}")
-            msg.attach(p)
+        files = os.listdir(file_path)
+        for i in files:
+            file_addr = os.path.join(file_path,i)
+            with open(file_addr, 'rb') as file:
+                p = MIMEApplication(file.read())
+                p.add_header('Content-Disposition',f"attachment; filename={file_addr.split('/')[-1]}")
+                msg.attach(p)
             
-            return msg
+        return msg
 
     def send_mail(self, receiver,msg): 
         server = smtplib.SMTP(self.smtp_host, self.smtp_port)
